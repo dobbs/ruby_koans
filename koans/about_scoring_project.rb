@@ -29,19 +29,12 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 #
 # Your goal is to write the score method.
 
-
-def sets (roll) roll == 1 ? 1000 : roll * 100 end
-def ones (roll) ({1 => 100, 5 => 50})[roll] || 0 end
-def score_for (count, roll) count / 3 * sets(roll) + count.modulo(3) * ones(roll) end
-def score(dice) (1..6).inject(0) {|sum, roll| sum + score_for(dice.count(roll), roll)} end
-
 def _set(count, roll) count / 3 * (roll == 1 ? 1000 : roll * 100) end
 def score(dice)
   _1s, _5s, ct = 0, 0, Hash.new(0)
   dice.each {|roll| roll==1 ? _1s+=1 : roll==5 ? _5s+=1 : ct[roll]+=1}
   ((_1s%3)*100)+((_5s%3)*50)+_set(_1s,1)+_set(_5s,5)+ct.keys.inject(0){|s,k|s+_set(ct[k], k)}
 end
-
 
 class AboutScoringProject < EdgeCase::Koan
   def test_score_of_an_empty_list_is_zero
